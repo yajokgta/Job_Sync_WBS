@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="SinghaDb">
+  <DataContextMoniker Name="/SinghaDbDataContext" />
+  <nestedChildShapes>
+    <classShape Id="346e552c-77af-417f-81ed-6306eae28858" absoluteBounds="3.5, 2.375, 2, 3.5016097005208326">
+      <DataClassMoniker Name="/SinghaDbDataContext/INFWBSElement" />
+      <nestedChildShapes>
+        <elementListCompartment Id="114b1d85-2f71-4cc3-aab0-cb9fea2b75f7" absoluteBounds="3.515, 2.835, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
