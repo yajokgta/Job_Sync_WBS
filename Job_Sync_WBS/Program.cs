@@ -11,8 +11,9 @@ namespace Job_Sync_WBS
     {
         static void Main(string[] args)
         {
+            StartInsert start = new StartInsert();
             Console.ForegroundColor = ConsoleColor.Green;
-            StartInsert.insertDB();
+            start.insertDB();
             /*CallAPI.callAPI();*/
         }
     }

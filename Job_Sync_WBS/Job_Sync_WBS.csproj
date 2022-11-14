@@ -37,6 +37,7 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
@@ -47,7 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alertmail.cs" />
+    <Compile Include="API.cs" />
     <Compile Include="CallAPI.cs" />
+    <Compile Include="Model\INFWBSElementModel.cs" />
     <Compile Include="Model\SAPModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +66,7 @@
       <DependentUpon>SinghaDb.dbml</DependentUpon>
     </Compile>
     <Compile Include="StartInsert.cs" />
+    <Compile Include="WriteLogFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

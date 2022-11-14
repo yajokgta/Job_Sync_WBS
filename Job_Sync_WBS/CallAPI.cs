@@ -17,9 +17,9 @@ namespace Job_Sync_WBS
         public static string apipath = ConfigurationSettings.AppSettings["APIUrl"];
         public static string datefrom = ConfigurationSettings.AppSettings["DATE_FROM"];
         public static string dateto = ConfigurationSettings.AppSettings["DATE_TO"];
-        public static List<INFWBSElement> getAllSAP()
+        public async Task<string> getAllSAP()
         {
-            List<INFWBSElement> respones = new List<INFWBSElement>();
+            string respones = null;
             try
             {
                 /*string json = File.ReadAllText("D:\\response.json");
@@ -28,8 +28,10 @@ namespace Job_Sync_WBS
                 Console.WriteLine("DATE_FROM : " + datefrom);
                 Console.WriteLine("DATE_TO : " + dateto);
                 HttpClient client = new HttpClient();
-                Console.WriteLine("Process...");
-                List<INFWBSElement> customer = new List<INFWBSElement>();
+                client.Timeout = TimeSpan.FromMinutes(30);
+                WriteLogFile.writeLogFile("Process...10%");
+                Console.WriteLine("Process...10%");
+                
                 var body = new
                 {
                     I_DATA = new
@@ -38,44 +40,30 @@ namespace Job_Sync_WBS
                         DATE_TO = dateto
                     }
                 };
+                WriteLogFile.writeLogFile("Process...20%");
+                Console.WriteLine("Process...20%");
                 client.DefaultRequestHeaders.Add("Authorization", "Basic TU9MU0VSVklDRTppbml0MTIzNA==");
                 var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
+                WriteLogFile.writeLogFile("Process...30%");
+                Console.WriteLine("Process...30%");
                 var respone = client.PostAsync("http://203.146.13.162:9010/e-expense/ZEX_M30?sap-client=900&format=json&sap-language=TH", content);
                 respone.Wait();
                 var result = respone.Result;
-                var message = result.Content.ReadAsStringAsync().Result;
-                var sapmodel = JsonConvert.DeserializeObject<SAPModel.Root > (message);
-                foreach (var sap in sapmodel.E_DATA)
-                {
-                    INFWBSElement sapmap = new INFWBSElement
-                    {
-                        WBS_CODE = sap.WBS,
-                        DESC1 = sap.DESC,
-                        COM_CODE = sap.COM_CODE,
-                        CreatedDate = Convert.ToDateTime(sap.CREATE_DATE),
-                        BUSINESS_AREA = sap.BUSINESS_AREA,
-                        Year = sap.YEAR,
-                        CostCenter = sap.COSTCENTER,
-                        CreatedBy = "SYSTEM",
-                        ModifiedBy = "SYSTEM",
-                        ModifiedDate = DateTime.Now,
-                        IsActive = true,
-                        SAPCode = true,
-                        DESC2 = string.Empty
-                    };
-                    customer.Add(sapmap);
-                }
-                Console.WriteLine("Call API Success : " + DateTime.Now);
-                respones = customer;
+                var massage = result.Content.ReadAsStringAsync().Result;
+                WriteLogFile.writeLogFile("Call API SUCCESS");
+                Console.WriteLine("Call API SUCCESS");
+                WriteLogFile.writeLogFile("Process...40%");
+                Console.WriteLine("Process...40%");
+                respones = massage;
+                WriteLogFile.writeLogFile("Process...50%");
+                Console.WriteLine("Process...50%");      
             }
             catch(Exception e)
             {
+                WriteLogFile.writeLogFile(e.ToString());
                 Console.WriteLine(e);
             }
             return respones;
-
-
-
         }
     }
 }
