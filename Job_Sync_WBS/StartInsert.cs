@@ -39,8 +39,8 @@ namespace Job_Sync_WBS
                 WriteLogFile.writeLogFile("Connect DataBase Fail..! : "+ e);
                 Console.WriteLine("Connect DataBase Fail..!");
             }
-            //freezena = db.INFWBSElements.Where(x => x.DESC1 == "N/A").ToList();
-            /*foreach (var freez in freezena)
+            var freezena = db.INFWBSElements.Where(x => x.DESC1 == "N/A").ToList();
+            foreach (var freez in freezena)
             {
                 INFWBSElementModel freezmodel = new INFWBSElementModel
                 {
@@ -52,10 +52,15 @@ namespace Job_Sync_WBS
                     CostCenter = freez.CostCenter,
                     IsActive = freez.IsActive.ToString(),
                     SAPCode = freez.SAPCode.ToString(),
-                    Year = freez.Year
+                    Year = freez.Year,
+                    CreatedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss", CultureInfo.InvariantCulture),
+                    ModifiedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss"),
+                    CreatedBy = "SYSTEM",
+                    ModifiedBy = "SYSTEM",
                 };
                 custommodel.Add(freezmodel);
-            }*/
+            }
+
             string message = await sap.getAllSAP();
             var sapmodel = JsonConvert.DeserializeObject<SAPModel.Root>(message);
 
@@ -89,7 +94,7 @@ namespace Job_Sync_WBS
             Console.WriteLine("Delete All : " + db.INFWBSElements.Count());
             WriteLogFile.writeLogFile("Process...60%");
             Console.WriteLine("Process...60%");
-            db.ExecuteCommand("DELETE FROM dbo.INFWBSElement Where DESC1 <> 'N/A'");
+            db.ExecuteCommand("TRUNCATE TABLE [dbo.INFWBSElement]");
             WriteLogFile.writeLogFile("Insert RECORD : " + custommodel.Count);
             Console.WriteLine("Insert RECORD : " + custommodel.Count);
             WriteLogFile.writeLogFile("Process...70%");
