@@ -81,11 +81,12 @@ namespace Job_Sync_WBS
                 
                 custommodel.Add(sapmap);
             }
-            var olddata = db.INFWBSElements.ToList();
+
+            //var olddata = db.INFWBSElements.ToList();
             WriteLogFile.writeLogFile("DATA RECORD : " + custommodel.Count);
             Console.WriteLine("DATA RECORD : " + custommodel.Count);
-            WriteLogFile.writeLogFile("Delete All : "+ olddata.Count);
-            Console.WriteLine("Delete All : " + olddata.Count);
+            WriteLogFile.writeLogFile("Delete All : "+ db.INFWBSElements.Count());
+            Console.WriteLine("Delete All : " + db.INFWBSElements.Count());
             WriteLogFile.writeLogFile("Process...60%");
             Console.WriteLine("Process...60%");
             db.ExecuteCommand("DELETE FROM dbo.INFWBSElement Where DESC1 <> 'N/A'");
