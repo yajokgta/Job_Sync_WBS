@@ -15,10 +15,10 @@ using System.Threading.Tasks;
 
 namespace Job_Sync_WBS
 {
-    internal class StartInsert
+    public class StartInsert
     {
         public static string constr = ConfigurationSettings.AppSettings["ConnectionString"];
-        public async Task insertDB()
+        public async Task InsertDBAsync()
         {
             SqlBulkCopy copy = new SqlBulkCopy(constr);
             CallAPI sap = new CallAPI();
@@ -39,68 +39,69 @@ namespace Job_Sync_WBS
                 WriteLogFile.writeLogFile("Connect DataBase Fail..! : "+ e);
                 Console.WriteLine("Connect DataBase Fail..!");
             }
-            var freezena = db.INFWBSElements.Where(x => x.DESC1 == "N/A").ToList();
-            foreach (var freez in freezena)
-            {
-                INFWBSElementModel freezmodel = new INFWBSElementModel
-                {
-                    WBS_CODE = freez.WBS_CODE,
-                    DESC1 = freez.DESC1,
-                    COM_CODE = freez.COM_CODE,
-                    BUSINESS_AREA = freez.BUSINESS_AREA,
-                    DESC2 = freez.DESC2,
-                    CostCenter = freez.CostCenter,
-                    IsActive = freez.IsActive.ToString(),
-                    SAPCode = freez.SAPCode.ToString(),
-                    Year = freez.Year,
-                    CreatedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss", CultureInfo.InvariantCulture),
-                    ModifiedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss"),
-                    CreatedBy = "SYSTEM",
-                    ModifiedBy = "SYSTEM",
-                };
-                custommodel.Add(freezmodel);
-            }
-
-            string message = await sap.getAllSAP();
-            var sapmodel = JsonConvert.DeserializeObject<SAPModel.Root>(message);
-
-            foreach (var sapm in sapmodel.E_DATA)
-            {
-                string dt = Convert.ToDateTime(sapm.CREATE_DATE).ToString("yyyy/MM/dd h:mm:ss");
-                INFWBSElementModel sapmap = new INFWBSElementModel
-                {
-                    WBS_CODE = sapm.WBS,
-                    DESC1 = sapm.DESC,
-                    COM_CODE = sapm.COM_CODE,
-                    CreatedDate = DateTime.ParseExact(dt, "yyyy/MM/dd h:mm:ss", CultureInfo.InvariantCulture).ToString("yyyy/MM/dd h:mm:ss"),
-                    BUSINESS_AREA = sapm.BUSINESS_AREA,
-                    Year = sapm.YEAR,
-                    CostCenter = sapm.COSTCENTER,
-                    CreatedBy = "SYSTEM",
-                    ModifiedBy = "SYSTEM",
-                    ModifiedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss"),
-                    IsActive = "true",
-                    SAPCode = "true",
-                    DESC2 = string.Empty
-                };
-                
-                custommodel.Add(sapmap);
-            }
-
-            //var olddata = db.INFWBSElements.ToList();
-            WriteLogFile.writeLogFile("DATA RECORD : " + custommodel.Count);
-            Console.WriteLine("DATA RECORD : " + custommodel.Count);
-            WriteLogFile.writeLogFile("Delete All : "+ db.INFWBSElements.Count());
-            Console.WriteLine("Delete All : " + db.INFWBSElements.Count());
-            WriteLogFile.writeLogFile("Process...60%");
-            Console.WriteLine("Process...60%");
-            db.ExecuteCommand("TRUNCATE TABLE [dbo.INFWBSElement]");
-            WriteLogFile.writeLogFile("Insert RECORD : " + custommodel.Count);
-            Console.WriteLine("Insert RECORD : " + custommodel.Count);
-            WriteLogFile.writeLogFile("Process...70%");
-            Console.WriteLine("Process...70%");
+          
             try
             {
+                var freezena = db.INFWBSElements.Where(x => x.DESC1 == "N/A").ToList();
+                foreach (var freez in freezena)
+                {
+                    INFWBSElementModel freezmodel = new INFWBSElementModel
+                    {
+                        WBS_CODE = freez.WBS_CODE,
+                        DESC1 = freez.DESC1,
+                        COM_CODE = freez.COM_CODE,
+                        BUSINESS_AREA = freez.BUSINESS_AREA,
+                        DESC2 = freez.DESC2,
+                        CostCenter = freez.CostCenter,
+                        IsActive = freez.IsActive.ToString(),
+                        SAPCode = freez.SAPCode.ToString(),
+                        Year = freez.Year,
+                        CreatedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss", CultureInfo.InvariantCulture),
+                        ModifiedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss"),
+                        CreatedBy = "SYSTEM",
+                        ModifiedBy = "SYSTEM",
+                    };
+                    custommodel.Add(freezmodel);
+                }
+
+                string message = await sap.getAllSAP();
+                var sapmodel = JsonConvert.DeserializeObject<SAPModel.Root>(message);
+
+                foreach (var sapm in sapmodel.E_DATA)
+                {
+                    string dt = Convert.ToDateTime(sapm.CREATE_DATE).ToString("yyyy/MM/dd h:mm:ss");
+                    INFWBSElementModel sapmap = new INFWBSElementModel
+                    {
+                        WBS_CODE = sapm.WBS,
+                        DESC1 = sapm.DESC,
+                        COM_CODE = sapm.COM_CODE,
+                        CreatedDate = DateTime.ParseExact(dt, "yyyy/MM/dd h:mm:ss", CultureInfo.InvariantCulture).ToString("yyyy/MM/dd h:mm:ss"),
+                        BUSINESS_AREA = sapm.BUSINESS_AREA,
+                        Year = sapm.YEAR,
+                        CostCenter = sapm.COSTCENTER,
+                        CreatedBy = "SYSTEM",
+                        ModifiedBy = "SYSTEM",
+                        ModifiedDate = DateTime.Now.ToString("yyyy/MM/dd h:mm:ss"),
+                        IsActive = "true",
+                        SAPCode = "true",
+                        DESC2 = string.Empty
+                    };
+
+                    custommodel.Add(sapmap);
+                }
+
+                var olddata = db.INFWBSElements.ToList();
+                WriteLogFile.writeLogFile("DATA RECORD : " + custommodel.Count);
+                Console.WriteLine("DATA RECORD : " + custommodel.Count);
+                WriteLogFile.writeLogFile("Delete All : " + db.INFWBSElements.Count());
+                Console.WriteLine("Delete All : " + db.INFWBSElements.Count());
+                WriteLogFile.writeLogFile("Process...60%");
+                Console.WriteLine("Process...60%");
+                db.ExecuteCommand("TRUNCATE TABLE INFWBSElement");
+                WriteLogFile.writeLogFile("Insert RECORD : " + custommodel.Count);
+                Console.WriteLine("Insert RECORD : " + custommodel.Count);
+                WriteLogFile.writeLogFile("Process...70%");
+                Console.WriteLine("Process...70%");
                 WriteLogFile.writeLogFile("Process...80%");
                 Console.WriteLine("Process...80%");
                 copy.DestinationTableName = "dbo.INFWBSElement";
@@ -118,6 +119,7 @@ namespace Job_Sync_WBS
             Console.WriteLine("Process...100% " + DateTime.Now);
             Console.WriteLine("Close (10 Sec) " + DateTime.Now);
             Thread.Sleep(10000);
+            Environment.Exit(0);
         }
         public static DataTable ToDataTable<T>(List<T> items)
         {

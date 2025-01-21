@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Job_Sync_WBS
 {
-    internal class Program
+    class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             StartInsert start = new StartInsert();
             Console.ForegroundColor = ConsoleColor.Green;
-            start.insertDB();
+            await start.InsertDBAsync();
             /*CallAPI.callAPI();*/
         }
     }
