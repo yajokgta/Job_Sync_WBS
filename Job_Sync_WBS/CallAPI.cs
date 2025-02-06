@@ -42,6 +42,7 @@ namespace Job_Sync_WBS
                 Console.WriteLine("Process...20%");
                 WriteLogFile.writeLogFile($"Authorization : {Authorization}");
                 WriteLogFile.writeLogFile($"apiPath : {apiPath}");
+                var start_request = DateTime.Now;
                 using (HttpClient client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(BaseAPI);
@@ -67,7 +68,8 @@ namespace Job_Sync_WBS
                     WriteLogFile.writeLogFile("Process...50%");
                     Console.WriteLine("Process...50%");
                 }
-
+                WriteLogFile.writeLogFile($"request time : {DateTime.Now- start_request}");
+                Console.WriteLine($"request time : {DateTime.Now - start_request}");
             }
             catch (TaskCanceledException ex) when (!ex.CancellationToken.IsCancellationRequested)
             {
@@ -76,7 +78,7 @@ namespace Job_Sync_WBS
             }
             catch (Exception ex)
             {
-                WriteLogFile.writeLogFile($"An error occurred: {ex.Message}");
+                WriteLogFile.writeLogFile($"An error occurred: {ex}");
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
             return respones;
